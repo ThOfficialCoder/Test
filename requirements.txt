@@ -1,4 +1,4 @@
 # FLAW 6: deliberately outdated packages (scanners read this file; no install needed)
-Flask==0.12.2
+Flask==3.1.3
 requests==2.19.0
 PyYAML==5.3
