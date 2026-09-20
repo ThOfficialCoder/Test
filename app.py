@@ -54,5 +54,5 @@ def find_user_safe():
 
 
 if __name__ == "__main__":
-    # FLAW 5: debug mode enabled
-    app.run(debug=True)
+    # Debug disabled to avoid exposing the interactive debugger
+    app.run(debug=False)
