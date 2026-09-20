@@ -21,9 +21,10 @@ def get_db():
 @app.route("/user")
 def find_user():
     name = request.args.get("name", "")
-    # FLAW 2: SQL injection (string concatenation)
-    query = "SELECT id, name FROM users WHERE name = '" + name + "'"
-    rows = get_db().execute(query).fetchall()
+    # Fixed: use parameterized query to prevent SQL injection
+    rows = get_db().execute(
+        "SELECT id, name FROM users WHERE name = ?", (name,)
+    ).fetchall()
     return str(rows)
 
 
