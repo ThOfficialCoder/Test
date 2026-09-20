@@ -4,7 +4,7 @@ Never deploy this. Every key below is fake.
 """
 import os
 import sqlite3
-from flask import Flask, request
+from flask import Flask, request, escape
 
 app = Flask(__name__)
 
@@ -31,8 +31,8 @@ def find_user():
 @app.route("/hello")
 def hello():
     name = request.args.get("name", "world")
-    # FLAW 3: reflected cross-site scripting (unescaped user input in HTML)
-    return f"<h1>Hello {name}</h1>"
+    # Fixed: escape user input before embedding in HTML
+    return f"<h1>Hello {escape(name)}</h1>"
 
 
 @app.route("/download")
