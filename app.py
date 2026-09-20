@@ -38,8 +38,14 @@ def hello():
 @app.route("/download")
 def download():
     filename = request.args.get("file", "readme.txt")
-    # FLAW 4: path traversal (user controls the file path)
-    with open(os.path.join("files", filename)) as f:
+    base_dir = os.path.realpath("files")
+    requested_path = os.path.realpath(os.path.join(base_dir, filename))
+
+    # Ensure the requested path stays within the intended base directory
+    if not (requested_path == base_dir or requested_path.startswith(base_dir + os.sep)):
+        return "Invalid file path", 400
+
+    with open(requested_path) as f:
         return f.read()
 
 
