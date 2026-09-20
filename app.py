@@ -5,6 +5,7 @@ Never deploy this. Every key below is fake.
 import os
 import sqlite3
 from flask import Flask, request, escape
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -38,8 +39,12 @@ def hello():
 @app.route("/download")
 def download():
     filename = request.args.get("file", "readme.txt")
+    safe_filename = secure_filename(filename)
+    if not safe_filename:
+        return "Invalid file path", 400
+
     base_dir = os.path.realpath("files")
-    requested_path = os.path.realpath(os.path.join(base_dir, filename))
+    requested_path = os.path.realpath(os.path.join(base_dir, safe_filename))
 
     # Ensure the requested path stays within the intended base directory
     if not (requested_path == base_dir or requested_path.startswith(base_dir + os.sep)):
